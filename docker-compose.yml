@@ -1,0 +1,16 @@
+# Este arquivo define os serviços que serão executados com o Docker Compose.
+# O serviço 'nlw-agents-pg' utiliza a imagem do PostgreSQL já preparada com a extensão pgvector (versão 17).
+# As variáveis de ambiente configuram o usuário, senha e nome do banco de dados.
+# A porta 5432 do container é mapeada para a porta 5432 do host, permitindo acesso externo ao banco.
+# O volume monta o arquivo setup.sql para inicializar o banco com a extensão vector ao subir o container.
+services:
+  nlw-agents-pg:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: agents
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./docker/setup.sql:/docker-entrypoint-initdb.d/setup.sql
