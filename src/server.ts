@@ -9,11 +9,14 @@
 import { fastifyCors } from '@fastify/cors';
 import { fastify } from 'fastify';
 import {
-    serializerCompiler,
-    validatorCompiler,
-    type ZodTypeProvider,
-} from 'fastify-type-provider-zod'
+  serializerCompiler,
+  validatorCompiler,
+  type ZodTypeProvider,
+} from 'fastify-type-provider-zod';
 import { env } from './env.ts';
+import { createQuestionRoute } from './http/routes/create-question.ts';
+import { createRoomRoute } from './http/routes/create-room.ts';
+import { getRoomQuestions } from './http/routes/get-room-questions.ts';
 import { getRoomsRoute } from './http/routes/get-rooms.ts';
 
 // Cria uma instância do servidor Fastify
@@ -28,24 +31,27 @@ const app = fastify().withTypeProvider<ZodTypeProvider>();
 // O parâmetro origin define quais origens são permitidas para fazer requisições
 // Neste caso, estamos permitindo requisições da origem 'http://localhost:5173'
 app.register(fastifyCors, {
-    origin: 'http://localhost:5173',
-})
+  origin: 'http://localhost:5173',
+});
 
 // Define o compilador de serialização e validação para o Fastify
 // O serializerCompiler é usado para serializar os dados de resposta
 // O validatorCompiler é usado para validar os dados de entrada das requisições
 // Ambos usam os esquemas definidos pelo Zod para garantir que os dados estejam corretos
-app.setSerializerCompiler(serializerCompiler)
-app.setValidatorCompiler(validatorCompiler)
+app.setSerializerCompiler(serializerCompiler);
+app.setValidatorCompiler(validatorCompiler);
 
 // Define uma rota de saúde (health check) no servidor
 // Esta rota responde com 'OK' quando acessada, indicando que o servidor está funcionando corretamente
 app.get('/health', () => {
-    return 'OK'
-})
+  return 'OK';
+});
 
-app.register(getRoomsRoute)
+app.register(getRoomsRoute);
+app.register(createRoomRoute);
+app.register(getRoomQuestions);
+app.register(createQuestionRoute);
 
 // Inicia o servidor na porta definida pelas variáveis de ambiente
 // A variável PORT é definida no arquivo env.ts e tem um valor padrão de 3333
-app.listen({ port: env.PORT })
+app.listen({ port: env.PORT });
