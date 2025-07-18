@@ -10,9 +10,10 @@ import { z } from 'zod';
 // e deve começar com 'postgresql://', indicando que é uma conexão com um banco de dados PostgreSQL
 // O método z.string().url() valida que a string é uma URL válida
 const envSchema = z.object({
-    PORT: z.coerce.number().default(3333),
-    DATABASE_URL: z.string().url().startsWith('postgresql://')
-})
+  PORT: z.coerce.number().default(3333),
+  DATABASE_URL: z.string().url().startsWith('postgresql://'),
+  GEMINI_API_KEY: z.string(),
+});
 
 // Exportando o esquema de validação para ser usado em outros arquivos
 // Aqui, estamos usando o método parse para validar as variáveis de ambiente
@@ -20,4 +21,4 @@ const envSchema = z.object({
 // o process.env contém as variáveis de ambiente do Node.js
 // o process vem do ambiente de execução do Node.js
 // e é uma maneira de acessar as variáveis de ambiente do sistema operacional
-export const env = envSchema.parse(process.env)
+export const env = envSchema.parse(process.env);

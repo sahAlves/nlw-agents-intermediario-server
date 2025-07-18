@@ -15,6 +15,13 @@
       "when": 1752797096594,
       "tag": "0001_late_gideon",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1752876469443,
+      "tag": "0002_bright_infant_terrible",
+      "breakpoints": true
     }
   ]
 }

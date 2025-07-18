@@ -7,6 +7,7 @@
 // CORS é um mecanismo que permite que recursos restritos em uma página da web sejam solicitados de outro domínio
 // importa o módulo env.ts para acessar as variáveis de ambiente definidas
 import { fastifyCors } from '@fastify/cors';
+import { fastifyMultipart } from '@fastify/multipart';
 import { fastify } from 'fastify';
 import {
   serializerCompiler,
@@ -18,6 +19,7 @@ import { createQuestionRoute } from './http/routes/create-question.ts';
 import { createRoomRoute } from './http/routes/create-room.ts';
 import { getRoomQuestions } from './http/routes/get-room-questions.ts';
 import { getRoomsRoute } from './http/routes/get-rooms.ts';
+import { uploadAudioRoute } from './http/routes/upload-audio.ts';
 
 // Cria uma instância do servidor Fastify
 // O método withTypeProvider<ZodTypeProvider>() é usado para integrar o Zod
@@ -33,6 +35,8 @@ const app = fastify().withTypeProvider<ZodTypeProvider>();
 app.register(fastifyCors, {
   origin: 'http://localhost:5173',
 });
+
+app.register(fastifyMultipart);
 
 // Define o compilador de serialização e validação para o Fastify
 // O serializerCompiler é usado para serializar os dados de resposta
@@ -51,6 +55,7 @@ app.register(getRoomsRoute);
 app.register(createRoomRoute);
 app.register(getRoomQuestions);
 app.register(createQuestionRoute);
+app.register(uploadAudioRoute);
 
 // Inicia o servidor na porta definida pelas variáveis de ambiente
 // A variável PORT é definida no arquivo env.ts e tem um valor padrão de 3333
