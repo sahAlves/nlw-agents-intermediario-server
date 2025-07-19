@@ -1,7 +1,7 @@
 # 🚀 Let me Ask - Server/API
 
-Bem-vindo ao backend do **Let me Ask**, desenvolvido durante o evento **NLW Agents** da Rocketseat!  
-Esta API permite criar salas, enviar perguntas e consultar respostas em tempo real.
+Bem-vindo ao backend do **Let me Ask**, desenvolvido durante a trilha intermediária do evento **NLW Agents** da Rocketseat!  
+Esta API permite criar salas, enviar perguntas e consultar respostas em tempo real — tudo com o apoio de um agente de I.A. que torna a interação muito mais dinâmica.
 
 ---
 
@@ -10,18 +10,36 @@ Esta API permite criar salas, enviar perguntas e consultar respostas em tempo re
 - **Node.js** & **TypeScript** — Backend moderno e tipado
 - **Fastify** — Framework web rápido e eficiente
 - **Zod** — Validação de dados e variáveis de ambiente
-- **drizzle-orm** — ORM para PostgreSQL
-- **drizzle-seed** — Seed de banco de dados
+- **Drizzle ORM** — ORM para PostgreSQL
+- **Drizzle Seed** — Seed de banco de dados
 - **PostgreSQL** + **pgvector** — Banco relacional com extensão para IA
-- **@fastify/cors** — Suporte a CORS
+- **Docker** — Containerização para facilitar deploy e desenvolvimento
+- **Biome** — Ferramenta para lint e formatação de código
+- **Google Gemini** — API de IA para transcrição, embeddings e respostas inteligentes
+
 
 ---
 
-## 🧩 Padrões de Projeto
+## 🔧 Funcionalidades principais
 
-- **Type-safe API**: Validação de dados e tipos com Zod em todas as rotas
-- **Barrel Files**: Organização dos schemas do banco de dados
-- **Separation of Concerns**: Separação clara entre rotas, conexão com banco e validação de ambiente
+1. **Criar sala** (`POST /rooms`)
+   - Cria uma nova sala para receber perguntas e áudios
+
+2. **Receber áudio de sala** (`POST /rooms/:roomId/audio`)
+   - Faz upload de trechos de áudio
+   - Transcreve o áudio para português
+   - Gera embeddings e armazena no banco
+
+3. **Criar pergunta em sala** (`POST /rooms/:roomId/questions`)
+   - Recebe pergunta do usuário
+   - Gera embeddings da pergunta
+   - Busca trechos com maior similaridade semântica (> 0.7)
+   - Gera resposta com base no contexto encontrado
+   - Salva pergunta e resposta no banco
+
+4. **Listar perguntas da sala** (`GET /rooms/:roomId/questions`)
+   - Retorna todas as perguntas e respostas da sala especificada
+
 
 ---
 
@@ -29,8 +47,8 @@ Esta API permite criar salas, enviar perguntas e consultar respostas em tempo re
 
 1. **Clone o repositório**
    ```sh
-   git clone <url-do-repo>
-   cd server
+   git clone https://github.com/sahAlves/nlw-agents-intermediario-server.git
+   cd nlw-agents-intermediario-server
    ```
 
 2. **Instale as dependências**
@@ -43,7 +61,7 @@ Esta API permite criar salas, enviar perguntas e consultar respostas em tempo re
 
 4. **Suba o banco de dados com Docker**
    ```sh
-   docker-compose up -d
+   docker compose up -d
    ```
 
    - Para parar os containers:
@@ -60,13 +78,14 @@ Esta API permite criar salas, enviar perguntas e consultar respostas em tempo re
      ```
 
 5. **Comandos de banco de dados**
-   - Rodar as migrations:
-     ```sh
-     npm run db:migrate
-     ```
+   
    - Gerar tipos a partir do banco:
      ```sh
      npm run db:generate
+     ```
+   - Rodar as migrations:
+     ```sh
+     npm run db:migrate
      ```
    - Rodar o seed:
      ```sh
